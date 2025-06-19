@@ -26,7 +26,8 @@ namespace eStoreAPI.Controllers
                 Weight = p.Weight,
                 UnitPrice = p.UnitPrice,
                 UnitsInStock = p.UnitsInStock,
-                CategoryName = p.Category != null ? p.Category.CategoryName : null
+                CategoryName = p.Category != null ? p.Category.CategoryName : null,
+                CategoryId = p.Category != null ? p.Category.CategoryId : null
             }).ToList();
 
             return Ok(productDTOs);
@@ -36,8 +37,26 @@ namespace eStoreAPI.Controllers
         public IActionResult GetProductById(int id)
         {
             var product = productRepository.GetProductById(id);
-            return product == null ? NotFound() : Ok(product);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productDTO = new ProductDTO
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                Weight = product.Weight,
+                UnitPrice = product.UnitPrice,
+                UnitsInStock = product.UnitsInStock,
+                CategoryName = product.Category?.CategoryName,
+                CategoryId = product.Category?.CategoryId
+            };
+
+            return Ok(productDTO);
         }
+
 
         [HttpPost]
         public IActionResult AddProduct(Product product)

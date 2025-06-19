@@ -1,40 +1,50 @@
-﻿@model List<BusinessObject.Models.Product>
+﻿@model List<BusinessObject.DTO.ProductDTO>
 
-<h2>Danh sách sản phẩm</h2>
-
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
+@{
+    ViewData["Title"] = "Product List";
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ProductId</th>
-            <th>ProductName</th>
-            <th>Category</th>
-            <th>Weight</th>
-            <th>UnitPrice</th>
-            <th>UnitsInStock</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Product List</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-dark">+ Create New Product</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark text-center">
             <tr>
-                <td>@item.ProductId</td>
-                <td>@item.ProductName</td>
-                <td>@item.Category?.CategoryName</td>
-                <td>@item.Weight</td>
-                <td>@item.UnitPrice?.ToString("C")</td>
-                <td>@item.UnitsInStock</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-                </td>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Weight</th>
+                <th>Unit Price</th>
+                <th>Units In Stock</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="table-light">
+            @foreach (var item in Model)
+            {
+                <tr class="align-middle">
+                    <td class="text-center">@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Weight</td>
+                    <td>@item.UnitPrice?.ToString("C")</td>
+                    <td class="text-center">@item.UnitsInStock</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-dark me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

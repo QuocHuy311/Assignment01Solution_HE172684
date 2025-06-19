@@ -1,0 +1,40 @@
+﻿@model BusinessObject.DTO.MemberDTO
+@{
+    ViewData["Title"] = "Createt Member";
+    var isEdit = ViewContext.RouteData.Values["action"].ToString() == "Edit";
+}
+
+<div class="container mt-4">
+    <h2 class="text-dark mb-4">@ViewData["Title"]</h2>
+
+    <form asp-action="@ViewContext.RouteData.Values["action"]" method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="MemberId" />
+        }
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input asp-for="Password" class="form-control" type="password" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Company Name</label>
+            <input asp-for="CompanyName" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">City</label>
+            <input asp-for="City" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Country</label>
+            <input asp-for="Country" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-dark">Save</button>
+        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to list</a>
+    </form>
+</div>

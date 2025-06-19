@@ -42,6 +42,10 @@ namespace DataAccess.DAO
         public void AddMember(Member m)
         {
             using var context = new EStoreContext();
+            int maxId = context.Members.Any()
+                ? context.Members.Max(x => x.MemberId) : 0;
+
+            m.MemberId = maxId + 1;
             context.Members.Add(m);
             context.SaveChanges();
         }

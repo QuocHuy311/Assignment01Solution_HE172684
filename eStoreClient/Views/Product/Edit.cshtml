@@ -1,0 +1,45 @@
+﻿@model BusinessObject.DTO.ProductDTO
+
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Edit Product</h2>
+
+    <form asp-action="Edit" method="post" class="border p-4 rounded shadow-sm bg-white">
+        <input type="hidden" asp-for="ProductId" />
+
+        <div class="form-group mb-3">
+            <label asp-for="ProductName" class="form-label fw-bold text-dark">Product Name</label>
+            <input asp-for="ProductName" class="form-control border-dark text-dark bg-light" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Weight" class="form-label fw-bold text-dark">Weight</label>
+            <input asp-for="Weight" class="form-control border-dark text-dark bg-light" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="UnitPrice" class="form-label fw-bold text-dark">Unit Price</label>
+            <input asp-for="UnitPrice" class="form-control border-dark text-dark bg-light" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="UnitsInStock" class="form-label fw-bold text-dark">Units In Stock</label>
+            <input asp-for="UnitsInStock" class="form-control border-dark text-dark bg-light" />
+        </div>
+
+        <div class="form-group mb-4">
+            <label asp-for="CategoryId" class="form-label fw-bold text-dark">Category</label>
+            <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select border-dark text-dark bg-light">
+                <option value="">-- Select Category --</option>
+            </select>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-dark">Save</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </form>
+</div>

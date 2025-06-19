@@ -13,6 +13,7 @@ namespace BusinessObject.DTO
         public string? Weight { get; set; }
         public decimal? UnitPrice { get; set; }
         public int? UnitsInStock { get; set; }
+        public int? CategoryId { get; set; }
         public string? CategoryName { get; set; }
     }
 }

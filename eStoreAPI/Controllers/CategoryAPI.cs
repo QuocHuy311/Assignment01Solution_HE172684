@@ -1,4 +1,6 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.DTO;
+using BusinessObject.Models;
+using DataAccess.DAO;
 using DataAccess.IRepository;
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Http;
@@ -13,13 +15,34 @@ namespace eStoreAPI.Controllers
         private readonly ICategoryRepository categoryRepository = new CategoryRepository();
 
         [HttpGet]
-        public IActionResult GetAllCategory() => Ok(categoryRepository.GetCategories());
+        public IActionResult GetAllCategory()
+        {
+            var categories = categoryRepository.GetCategories();
+            var categoryDTOs = categories.Select(c => new CategoryDTO
+            {
+                CategoryId = c.CategoryId,
+                CategoryName = c.CategoryName,
+            }).ToList();
+
+            return Ok(categoryDTOs);
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetCategoryById(int id)
         {
-            var Category = categoryRepository.GetCategoryById(id);
-            return Category == null ? NotFound() : Ok(Category);
+            var category = categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categoryDTO = new CategoryDTO
+            {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+            };
+
+            return Ok(categoryDTO);
         }
 
         [HttpPost]

@@ -1,0 +1,42 @@
+﻿@model List<BusinessObject.DTO.MemberDTO>
+@{
+    ViewData["Title"] = "Member List";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Member List</h2>
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-dark">+ Add Member</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            @foreach (var member in Model)
+            {
+                <tr class="align-middle">
+                    <td class="text-center">@member.MemberId</td>
+                    <td>@member.Email</td>
+                    <td>@member.CompanyName</td>
+                    <td>@member.City</td>
+                    <td>@member.Country</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-dark me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@member.MemberId" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

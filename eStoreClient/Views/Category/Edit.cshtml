@@ -1,0 +1,15 @@
+﻿@model BusinessObject.DTO.CategoryDTO
+
+<h2 class="mt-4 mb-4">Edit Category</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="CategoryId" />
+
+    <div class="mb-3">
+        <label class="form-label">Category Name</label>
+        <input asp-for="CategoryName" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-dark">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

@@ -1,0 +1,32 @@
+﻿@model BusinessObject.DTO.ProductDTO
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Product Details</h2>
+
+    <div class="border p-4 rounded shadow-sm bg-white">
+        <dl class="row text-dark">
+            <dt class="col-sm-3 fw-bold">Product Name</dt>
+            <dd class="col-sm-9">@Model.ProductName</dd>
+
+            <dt class="col-sm-3 fw-bold">Category</dt>
+            <dd class="col-sm-9">@Model.CategoryName</dd>
+
+            <dt class="col-sm-3 fw-bold">Weight</dt>
+            <dd class="col-sm-9">@Model.Weight</dd>
+
+            <dt class="col-sm-3 fw-bold">Unit Price</dt>
+            <dd class="col-sm-9">@Model.UnitPrice?.ToString("C")</dd>
+
+            <dt class="col-sm-3 fw-bold">Units In Stock</dt>
+            <dd class="col-sm-9">@Model.UnitsInStock</dd>
+        </dl>
+    </div>
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-outline-dark">Back to List</a>
+    </div>
+</div>

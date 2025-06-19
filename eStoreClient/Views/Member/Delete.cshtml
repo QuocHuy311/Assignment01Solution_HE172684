@@ -1,0 +1,28 @@
+﻿@model BusinessObject.DTO.MemberDTO
+@{
+    ViewData["Title"] = "Delete Member";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger mb-4">Are you sure you want to delete this member?</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Company Name</dt>
+        <dd class="col-sm-9">@Model.CompanyName</dd>
+
+        <dt class="col-sm-3">City</dt>
+        <dd class="col-sm-9">@Model.City</dd>
+
+        <dt class="col-sm-3">Country</dt>
+        <dd class="col-sm-9">@Model.Country</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="MemberId" />
+        <button type="submit" class="btn btn-danger me-2">Delete</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to list</a>
+    </form>
+</div>

@@ -37,12 +37,16 @@ namespace DataAccess.DAO
         public Product GetProductById(int id)
         {
             using var context = new EStoreContext();
-            return context.Products.FirstOrDefault(p => p.ProductId == id);
+            return context.Products.Include(c => c.Category).FirstOrDefault(p => p.ProductId == id);
         }
 
         public void AddProduct(Product p)
         {
             using var context = new EStoreContext();
+            int maxId = context.Products.Any()
+                ? context.Products.Max(x => x.ProductId): 0;
+
+            p.ProductId = maxId + 1;
             context.Products.Add(p);
             context.SaveChanges();
         }

@@ -1,0 +1,42 @@
+﻿@model List<BusinessObject.DTO.CategoryDTO>
+
+@{
+    ViewData["Title"] = "Category List";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-dark">Category List</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-dark">+ Create New Category</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-light">
+            @foreach (var item in Model)
+            {
+                <tr class="align-middle">
+                    <td class="text-center">@item.CategoryId</td>
+                    <td>@item.CategoryName</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-dark me-1">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-secondary me-1">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.CategoryId" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

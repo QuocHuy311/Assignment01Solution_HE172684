@@ -1,0 +1,12 @@
+﻿@model BusinessObject.DTO.CategoryDTO
+
+<h2 class="mt-4 mb-4">Create Category</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">Category Name</label>
+        <input asp-for="CategoryName" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-dark">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
