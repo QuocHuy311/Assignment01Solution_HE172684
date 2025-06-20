@@ -1,0 +1,145 @@
+﻿@using Newtonsoft.Json
+@model BusinessObject.DTO.OrderDTO
+
+@{
+    ViewData["Title"] = "Create Order";
+    var members = ViewBag.Members as List<SelectListItem>;
+    var products = ViewBag.Products as List<SelectListItem>;
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="container mt-4">
+    <h2>Create New Order</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label class="form-label fw-bold">Member</label>
+            <select asp-for="MemberId" class="form-select">
+                <option value="">-- Select Member --</option>
+                @foreach (var member in members)
+                {
+                    <option value="@member.Value">@member.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Freight</label>
+            <input asp-for="Freight" class="form-control" />
+        </div>
+
+        <hr />
+        <h5 class="fw-bold">Add Products</h5>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select id="product-selector" class="form-select">
+                    <option value="">-- Select Product --</option>
+                    @foreach (var product in products)
+                    {
+                        <option value="@product.Value">@product.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success" onclick="addProduct()">+ Add</button>
+            </div>
+        </div>
+
+        <table class="table table-bordered" id="order-details-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Discount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div>
+            <button type="submit" class="btn btn-dark">Create Order</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const productData = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ProductData));
+        var index = 0;
+
+        function addProduct() {
+            const select = document.getElementById("product-selector");
+            const productId = select.value;
+            const productName = select.options[select.selectedIndex].text;
+
+            if (!productId) return;
+
+            // Check if already added
+            if (document.getElementById(`product-row-${productId}`)) {
+                alert("Sản phẩm đã được chọn!");
+                return;
+            }
+
+            const product = productData.find(p => p.ProductId == productId);
+            const maxQty = product?.UnitsInStock ?? 1000; // fallback nếu không tìm thấy
+
+            const table = document.querySelector("#order-details-table tbody");
+
+            const row = `
+                <tr id="product-row-${productId}">
+                    <td>
+                        <input type="hidden" name="OrderDetails[${index}].ProductId" value="${productId}" />
+                        <input type="text" class="form-control" value="${productName}" readonly />
+                    </td>
+                    <td>
+                                <input
+                                    name="OrderDetails[${index}].Quantity"
+                                    type="number"
+                                    class="form-control quantity-input"
+                                    value="1"
+                                    min="1"
+                                    max="${maxQty}"
+                                    data-max="${maxQty}" />
+                    </td>
+
+                    <td>
+                        <input name="OrderDetails[${index}].Discount" type="number" step="0.01" class="form-control" value="0" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeProduct('${productId}')">Remove</button>
+                    </td>
+                </tr>
+            `;
+            table.insertAdjacentHTML("beforeend", row);
+            index++;
+
+            select.value = "";
+        }
+
+        document.addEventListener("input", function (e) {
+            if (e.target.classList.contains("quantity-input")) {
+                const max = parseInt(e.target.dataset.max);
+                const val = parseInt(e.target.value);
+
+                if (val > max) {
+                    alert(`Số lượng vượt quá hàng tồn kho! Tối đa chỉ còn ${max}.`);
+                    e.target.value = max;
+                } else if (val < 1) {
+                    e.target.value = 1;
+                }
+            }
+        });
+
+        function removeProduct(productId) {
+            const row = document.getElementById(`product-row-${productId}`);
+            if (row) row.remove();
+        }
+    </script>
+}

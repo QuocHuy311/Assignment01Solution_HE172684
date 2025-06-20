@@ -1,0 +1,98 @@
+﻿@model BusinessObject.DTO.OrderViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+    decimal orderTotal = 0;
+}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Order Details</h4>
+        </div>
+        <div class="card-body">
+            <!-- Order Info -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-secondary">Order ID:</label>
+                    <div class="form-control bg-light">@Model.OrderId</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold text-secondary">Member Email:</label>
+                    <div class="form-control bg-light">@Model.MemberEmail</div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Freight:</label>
+                    <div class="form-control bg-light">@Model.Freight</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Order Date:</label>
+                    <div class="form-control bg-light">@Model.OrderDate?.ToString("dd/MM/yyyy")</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Required Date:</label>
+                    <div class="form-control bg-light">@Model.RequiredDate?.ToString("dd/MM/yyyy")</div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold text-secondary">Shipped Date:</label>
+                    <div class="form-control bg-light">@Model.ShippedDate?.ToString("dd/MM/yyyy")</div>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Order Items -->
+            <h5 class="fw-bold mb-3">Order Items</h5>
+
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Discount (%)</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        decimal unitPrice = item.UnitPrice ?? 0;
+                        int qty = item.Quantity ?? 0;
+                        double discount = item.Discount ?? 0;
+                        decimal total = unitPrice * qty * (decimal)(1 - discount);
+                        orderTotal += total;
+
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@unitPrice.ToString("C")</td>
+                            <td>@qty</td>
+                            <td>@discount</td>
+                            <td>@total.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Total Freight:</td>
+                        <td>@(Model.Freight?.ToString("C") ?? "0")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold">Order Total:</td>
+                        <td>@((orderTotal + (Model.Freight ?? 0)).ToString("C"))</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

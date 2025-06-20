@@ -110,5 +110,44 @@ namespace eStoreClient.Controllers
             ViewBag.Error = "Xóa thất bại!";
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Profile()
+        {
+            int? memberId = HttpContext.Session.GetInt32("MemberId");
+            if (memberId == null)
+                return RedirectToAction("Index", "Login");
+
+            var response = await _client.GetAsync($"members/{memberId}");
+            if (!response.IsSuccessStatusCode)
+                return NotFound();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var member = JsonConvert.DeserializeObject<MemberDTO>(json);
+            return View(member);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(MemberDTO member)
+        {
+            if (!ModelState.IsValid)
+                return View(member);
+
+            var json = JsonConvert.SerializeObject(member);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PutAsync("members", content);
+            if (response.IsSuccessStatusCode)
+            {
+                ViewBag.Success = "Profile updated successfully!";
+            }
+            else
+            {
+                ViewBag.Error = "Update failed!";
+            }
+
+            return View(member);
+        }
+
     }
 }

@@ -1,0 +1,59 @@
+﻿@model List<BusinessObject.DTO.OrderDTO>
+
+@{
+    ViewData["Title"] = "Order List";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3">Orders</h2>
+
+    @{
+        var role = Context.Session.GetString("Role");
+    }
+
+    @if (role.Equals("Admin"))
+    {
+        <div class="mb-3 d-flex justify-content-end">
+            <a asp-action="Create" class="btn btn-dark">+ Create New Order</a>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+    else if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No orders found.</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Member</th>
+                    <th>Order Date</th>
+                    <th>Shipped Date</th>
+                    <th>Freight</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.MemberEmail</td>
+                        <td>@(order.OrderDate?.ToString("dd/MM/yyyy"))</td>
+                        <td>@(order.ShippedDate?.ToString("dd/MM/yyyy"))</td>
+                        <td>@order.Freight?.ToString("C")</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@order.OrderId" class="btn btn-sm btn-info">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

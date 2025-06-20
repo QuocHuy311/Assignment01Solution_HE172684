@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,18 +31,22 @@ namespace DataAccess.DAO
         public List<Order> GetOrderList()
         {
             using var context = new EStoreContext();
-            return context.Orders.ToList();
+            return context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).ThenInclude(od => od.Product).ToList();
         }
 
         public Order GetOrderById(int id)
         {
             using var context = new EStoreContext();
-            return context.Orders.FirstOrDefault(m => m.OrderId == id);
+            return context.Orders.Include(o => o.Member).Include(o => o.OrderDetails).ThenInclude(od => od.Product).FirstOrDefault(m => m.OrderId == id);
         }
 
         public void AddOrder(Order o)
         {
             using var context = new EStoreContext();
+            int maxId = context.Orders.Any()
+                ? context.Orders.Max(x => x.OrderId) : 0;
+
+            o.OrderId = maxId + 1;
             context.Orders.Add(o);
             context.SaveChanges();
         }
