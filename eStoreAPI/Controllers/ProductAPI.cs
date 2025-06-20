@@ -78,5 +78,34 @@ namespace eStoreAPI.Controllers
             productRepository.DeleteProduct(id);
             return Ok();
         }
+
+        [HttpGet("search")]
+        public IActionResult GetProducts([FromQuery] string? keyword)
+        {
+            var products = productRepository.GetProducts();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                keyword = keyword.ToLower();
+                products = products
+                    .Where(p => p.ProductName != null && p.ProductName.ToLower().Contains(keyword))
+                    .ToList();
+            }
+
+            var productDTOs = products.Select(p => new ProductDTO
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                Weight = p.Weight,
+                UnitPrice = p.UnitPrice,
+                UnitsInStock = p.UnitsInStock,
+                CategoryName = p.Category != null ? p.Category.CategoryName : null,
+                CategoryId = p.Category != null ? p.Category.CategoryId : null
+            }).ToList();
+
+            return Ok(productDTOs);
+        }
+
+
     }
 }

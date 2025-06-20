@@ -17,21 +17,28 @@ namespace eStoreClient.Controllers
             _client = new HttpClient { BaseAddress = new Uri(baseUrl) };
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? keyword)
         {
-            HttpResponseMessage response = await _client.GetAsync("products"); 
+            string url = "products/search";
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                url += $"?keyword={Uri.EscapeDataString(keyword)}";
+            }
+
+            var response = await _client.GetAsync(url);
+
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
                 var products = JsonConvert.DeserializeObject<List<ProductDTO>>(json);
-                return View(products); 
+                ViewBag.Keyword = keyword;
+                return View(products);
             }
-            else
-            {
-                ViewBag.Error = "Không lấy được dữ liệu từ API";
-                return View(new List<ProductDTO>());
-            }
+
+            ViewBag.Error = "Không thể tải danh sách sản phẩm.";
+            return View(new List<ProductDTO>());
         }
+
 
         public async Task<IActionResult> Create()
         {

@@ -16,6 +16,11 @@
         <a asp-action="Create" class="btn btn-dark">+ Create New Product</a>
     </div>
 
+    <form method="get" asp-controller="Product" asp-action="Index" class="mb-3 d-flex">
+        <input type="text" name="keyword" value="@ViewBag.Keyword" class="form-control me-2" placeholder="Search Product Name..." />
+        <button type="submit" class="btn btn-dark">Search</button>
+    </form>
+
     <table class="table table-bordered table-hover">
         <thead class="table-dark text-center">
             <tr>
